@@ -2,25 +2,13 @@ sudo: required
 language: generic
 services:
 - docker
-cache:
-  directories:
-  - "$HOME/google-cloud-sdk/"
-env:
-- GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin
-  PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
 - openssl aes-256-cbc -K $encrypted_ea4ae50da6bc_key -iv $encrypted_ea4ae50da6bc_iv
-  -in nomadic-coast-274909-cd3f359f9887.json.enc -out ~\/Downloads/nomadic-coast-274909-cd3f359f9887.json
+  -in nomadic-coast-274909-cd3f359f9887.json.enc -out nomadic-coast-274909-cd3f359f9887.json
   -d
-- if [ ! -d "${GAE_PYTHONPATH}" ]; then python scripts/fetch_gae_sdk.py $(dirname
-  "${GAE_PYTHONPATH}"); fi
-- if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash;
-  fi
-- mkdir -p lib
-- gcloud auth activate-service-account --key-file client-secret.json
 - docker build -t haraldpaterek/docker-react -f Dockerfile.dev .
-install:
-- gcloud config set project docker-react
-script:
-- docker run -e CI=true haraldpaterek/docker-react npm run test
-- gcloud -q app deploy app.yaml --promote
+deploy:
+  provider: gae
+  keyfile: nomadic-coast-274909-cd3f359f9887.json
+  project: docker-react
+  no_promote: true
