@@ -9,8 +9,8 @@ env:
 - GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin
   PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-- openssl aes-256-cbc -K $encrypted_1c67c68a25af_key -iv $encrypted_1c67c68a25af_iv
-  -in nomadic-coast-274909-11bf13480ec9.json.enc -out client-secret.json
+- openssl aes-256-cbc -K $encrypted_ea4ae50da6bc_key -iv $encrypted_ea4ae50da6bc_iv
+  -in nomadic-coast-274909-cd3f359f9887.json.enc -out ~\/Downloads/nomadic-coast-274909-cd3f359f9887.json
   -d
 - if [ ! -d "${GAE_PYTHONPATH}" ]; then python scripts/fetch_gae_sdk.py $(dirname
   "${GAE_PYTHONPATH}"); fi
