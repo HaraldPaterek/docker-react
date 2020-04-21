@@ -8,7 +8,6 @@
 # id.
 runtime: nodejs10
 api_version: 1
-threadsafe: yes
 
 # Handlers define how to route requests to your application.
 handlers:
