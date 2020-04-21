@@ -4,8 +4,7 @@ services:
 - docker
 before_install:
 - openssl aes-256-cbc -K $encrypted_ea4ae50da6bc_key -iv $encrypted_ea4ae50da6bc_iv
-  -in nomadic-coast-274909-cd3f359f9887.json.enc -out nomadic-coast-274909-cd3f359f9887.json
-  -d
+  -in nomadic-coast-274909-cd3f359f9887.json.enc -out nomadic-coast-274909-cd3f359f9887.json -d
 - docker build -t haraldpaterek/docker-react -f Dockerfile.dev .
 deploy:
   provider: gae
