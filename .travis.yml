@@ -11,3 +11,4 @@ deploy:
   keyfile: nomadic-coast-274909-cd3f359f9887.json
   project: docker-react
   no_promote: true
+  skip_cleanup: true
