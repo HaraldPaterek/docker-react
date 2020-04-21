@@ -1,43 +1,32 @@
 sudo: required
-language: nodejs
+language: generic
 services:
-  - docker
-
+- docker
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
 env:
-# Make sure gcloud command is on our PATH and the App Engine SDK is in the Python path
-- GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
+- GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin
+  PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-# Install Google App Engine Python SDK
-- if [ ! -d "${GAE_PYTHONPATH}" ]; then
-    python scripts/fetch_gae_sdk.py $(dirname "${GAE_PYTHONPATH}");
-  fi
-# [START auth]
-# Decrypt the credentials we added to the repo using the key we added with the Travis command line tool
+- if [ ! -d "${GAE_PYTHONPATH}" ]; then python scripts/fetch_gae_sdk.py $(dirname
+  "${GAE_PYTHONPATH}"); fi
 - openssl aes-256-cbc -K $encrypted_1c67c68a25af_key -iv $encrypted_1c67c68a25af_iv
-  -in nomadic-coast-274909-11bf13480ec9.json.enc -out ~\nomadic-coast-274909-11bf13480ec9.json -d
+  -in nomadic-coast-274909-11bf13480ec9.json.enc -out ~\/nomadic-coast-274909-11bf13480ec9.json
+  -d
 # If the SDK is not already cached, download it and unpack it
 - if [ ! -d ${HOME}/google-cloud-sdk ]; then
     curl https://sdk.cloud.google.com | bash;
   fi
 - mkdir -p lib
-# Here we use the decrypted service account credentials to authenticate the command line tool
 - gcloud auth activate-service-account --key-file client-secret.json
 - docker build -t haraldpaterek/docker-react -f Dockerfile.dev .
-
 install:
-  # Set the correct project to deploy to
-  - gcloud config set project docker-react
-
+- gcloud config set project docker-react
 script:
-  - docker run -e CI=true haraldpaterek/docker-react npm run test
-  - gcloud -q app deploy app.yaml --promote
-
-language: generic 
+- docker run -e CI=true haraldpaterek/docker-react npm run test
+- gcloud -q app deploy app.yaml --promote
 dd:
 - openssl aes-256-cbc -K $encrypted_1c67c68a25af_key -iv $encrypted_1c67c68a25af_iv
   -in nomadic-coast-274909-11bf13480ec9.json.enc -out ~\/nomadic-coast-274909-11bf13480ec9.json
   -d
-
